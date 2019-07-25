@@ -20,14 +20,29 @@ search_string=str(input('Input the word you wish to search:'))
 flag=0
 found_index=(-1,-1)
 
+def format_cell(rowidx,colidx):
+    #determine the format of the column: 0-->A 27-->AB etc
+    sum=26
+    power=1
+    while colidx>sum:
+        power+=1
+        sum+=26**power
+    cell_num=""
+    while power>1:
+        cell_num+=str(chr(((colidx)//26)+64))
+        power-=1
+    cell_num+=str(chr(colidx%26 +65))
+    cell_num+=str(rowidx+1)
+    return cell_num
+
 for row in range(sheet.nrows):
     for column in range(sheet.ncols):
         flag=0
         if search_string.casefold() in str(sheet.cell(row,column).value).casefold():
-            found_index=(row+1,column+1)
+            found_index=(row,column)
             flag=1
         if flag==1:
-            print("Found in "+str(found_index)+" box")
+            print("Found in "+format_cell(found_index[0],found_index[1])+" box")
             input('Press Enter to continue')
 if found_index==(-1,-1):
     print("Not found")
